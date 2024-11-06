@@ -14,8 +14,17 @@ type ScanRequest struct {
 	Target string `json:"target"`
 }
 
+// Middleware to enable CORS
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type")
+}
+
 // scanHandler sends scan request to Python service and returns JSON response
 func scanHandler(w http.ResponseWriter, r *http.Request, defaultTarget string) {
+	enableCors(&w) // Mengaktifkan CORS di handler ini
+
 	// Log incoming request
 	log.Println("Received request for scan")
 
