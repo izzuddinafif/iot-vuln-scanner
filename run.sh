@@ -69,3 +69,4 @@ log "All services started:" > pid.txt
 log "Python scanner service PID: $PYTHON_PID" >> pid.txt
 log "Go server PID: $GO_PID" >> pid.txt
 log "Laravel server PID: $LARAVEL_PID" >> pid.txt
+echo "sudo kill $PYTHON_PID $GO_PID $LARAVEL_PID" >> pid.txt

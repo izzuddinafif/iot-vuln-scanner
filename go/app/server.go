@@ -28,15 +28,7 @@ func scanHandler(w http.ResponseWriter, r *http.Request, defaultTarget string) {
 	// Log incoming request
 	log.Println("Received request for scan")
 
-	// Check if target is specified in query parameters
-	target := r.URL.Query().Get("target")
-	if target == "" {
-		// Use default if no target is specified in the request
-		target = defaultTarget
-		log.Printf("No target specified in request, defaulting to: %s", target)
-	} else {
-		log.Printf("Target specified in request: %s", target)
-	}
+	target := defaultTarget
 
 	// Prepare scan request payload
 	scanReq := ScanRequest{Target: target}
