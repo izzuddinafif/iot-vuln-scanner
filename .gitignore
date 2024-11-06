@@ -1,11 +1,9 @@
-# Ignore Python cache
 __pycache__/
 *.pyc
+venv/
 
-# Ignore Go build files
 *.exe
 *.out
 *.log
 
-# Ignore OS-generated files
-.DS_Store
+*.txt
