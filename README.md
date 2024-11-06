@@ -18,31 +18,39 @@ IOT-VULN-SCANNER/
 ```
 
 ## Requirements
+Go: Version 1.16 or later
+Python: Version 3.7 or later
+Nmap: Ensure Nmap is installed on the system for network scanning
 
-    Go: Version 1.16 or later
-    Python: Version 3.7 or later
-    Nmap: Ensure Nmap is installed on the system for network scanning
-
-`sudo apt install nmap`
-
+```bash
+sudo apt install nmap
+```
 
 ## Setup Instructions
 
-    Clone the Repository:
+1. Clone the Repository:
 
-1. git clone https://github.com/yourusername/IOT-VULN-SCANNER.git
+```bash
+git clone https://github.com/yourusername/IOT-VULN-SCANNER.git
 cd IOT-VULN-SCANNER
+```
 
 2. Install Python Dependencies: Navigate to the python directory and install the required packages using requirements.txt.
 
-`pip install -r python/requirements.txt`
+```bash
+pip install -r python/requirements.txt
+```
 
 3. Run the Project: Use the run.sh script to start both the Go and Python services.
 
-`./run.sh [optional IP range]`
+```bash
+./run.sh [optional IP range]
+```
 
 - If no IP range is specified, it will default to 192.168.1.0/24.
 
 - Example:
 
-`./run.sh 192.168.217.0/24`
+```bash
+./run.sh 192.168.217.0/24
+```
