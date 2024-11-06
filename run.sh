@@ -1,7 +1,7 @@
 #!/bin/bash
 
 log() {
-    echo "$(date +"%Y-%m-%d %H:%M:%S") - $1" | tee -a deployment.log
+    echo "$(date +"%Y-%m-%d %H:%M:%S") - $1" 
 }
 
 # Ensure dependencies are installed
@@ -29,9 +29,15 @@ log "Python scanner service PID: $PYTHON_PID"
 # Allow the Python server to start up
 sleep 3
 
-# Run the Go server with the specified IP range as the target
+# Build and place the Go server binary in the bin/ directory
+log "Building Go server..."
+mkdir -p bin
+cd go/app
+go build -o ../../bin/server  # Build binary in bin/ directory
+cd ../..
+
 log "Starting Go server with target IP range: $IP_RANGE"
-nohup go run go/app/server.go -target="$IP_RANGE" > go.log 2>&1 &
+nohup ./bin/server -target="$IP_RANGE" > go.log 2>&1 &
 GO_PID=$!
 log "Go server PID: $GO_PID"
 
@@ -64,6 +70,7 @@ log "Python scanner service PID: $PYTHON_PID"
 log "Go server PID: $GO_PID"
 log "Laravel server PID: $LARAVEL_PID"
 
+# Write PID information and stop command to pid.txt
 cd ..
 log "All services started:" > pid.txt
 log "Python scanner service PID: $PYTHON_PID" >> pid.txt

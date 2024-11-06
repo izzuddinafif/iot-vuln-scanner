@@ -1,7 +1,7 @@
 __pycache__/
 *.pyc
 venv/
-
+bin/
 *.exe
 *.out
 *.log

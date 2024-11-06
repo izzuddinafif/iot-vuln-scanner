@@ -45,7 +45,7 @@
             const errorMessage = document.getElementById('error-message');
             errorMessage.textContent = '';
 
-            fetch('http://localhost:8080/scan')
+            fetch('https://iot-vuln-scanner.izzuddinafif.com/scan')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`Network response was not ok. Status Code: ${response.status}`);
@@ -64,6 +64,7 @@
         }
 
         function displayScanResults(data) {
+            console.log('Received data:', data);  // Check the structure here
             const resultsContainer = document.getElementById('scan-results');
             resultsContainer.innerHTML = '';
 

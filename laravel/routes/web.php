@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ScanController;
 
@@ -10,4 +11,10 @@ Route::get('/scan-results', [ScanController::class, 'getScanResults'])->name('ge
 
 Route::get('/', function () {
     return view('scan');
+});
+
+Route::get('/scan', function () {
+    $response = Http::timeout(6000)->get('http://localhost:8080/scan');
+    return response($response->body(), $response->status())
+           ->header('Content-Type', 'application/json');
 });
