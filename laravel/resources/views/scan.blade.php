@@ -4,28 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vulnerability Scanner</title>
-    <style>
-        #loading {
-            display: none;
-            font-weight: bold;
-            color: blue;
-        }
-        #scan-results div {
-            margin-top: 10px;
-            padding: 5px;
-            border: 1px solid #ccc;
-            background-color: #f9f9f9;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Vulnerability Scanner</h1>
-    <button id="start-scan">Mulai Scan</button>
-    <p id="loading">Scanning, please wait...</p>
+    <!-- Wrapper to center everything -->
+    <div class="center-wrapper">
+        <!-- Header Section -->
+        <header>
+            <h1>Vulnerability Scanner</h1>
+            <p>Scan your network for open ports and potential vulnerabilities.</p>
+        </header>
 
-    <h2>Hasil Scan:</h2>
-    <div id="scan-results">
-        <p>Hasil scan akan muncul di sini</p>
+        <!-- Main Content -->
+        <div class="scanner-container">
+            <button id="start-scan">Start Scan</button>
+            <div id="loading">
+                <div class="spinner"></div>
+                <p>Scanning...</p>
+            </div>
+
+            <h2>Scan Results:</h2>
+            <div id="scan-results">
+                <p>Results will appear here</p>
+            </div>
+            <div id="error-message" class="error-message"></div>
+        </div>
     </div>
 
     <script>
@@ -34,15 +37,14 @@
         });
 
         function startScan() {
-            // Tampilkan indikator loading
             const loadingElement = document.getElementById('loading');
-            loadingElement.style.display = 'block';
-            
-            // Bersihkan hasil sebelumnya
-            const resultsContainer = document.getElementById('scan-results');
-            resultsContainer.innerHTML = '';
+            loadingElement.style.display = 'flex';
 
-            // Kirim permintaan scan ke backend
+            const resultsContainer = document.getElementById('scan-results');
+            resultsContainer.innerHTML = '<p>Results will appear here</p>';
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = '';
+
             fetch('http://localhost:8080/scan')
                 .then(response => {
                     if (!response.ok) {
@@ -51,25 +53,23 @@
                     return response.json();
                 })
                 .then(data => {
-                    // Sembunyikan indikator loading
                     loadingElement.style.display = 'none';
-
-                    // Tampilkan hasil scan
                     displayScanResults(data);
                 })
                 .catch(error => {
                     loadingElement.style.display = 'none';
                     console.error('Fetch error:', error.message);
-                    alert(`Terjadi kesalahan: ${error.message}`);
+                    errorMessage.textContent = `Error occurred: ${error.message}`;
                 });
         }
 
         function displayScanResults(data) {
             const resultsContainer = document.getElementById('scan-results');
-            resultsContainer.innerHTML = ''; // Bersihkan konten sebelumnya
+            resultsContainer.innerHTML = '';
 
             for (const [host, hostData] of Object.entries(data)) {
                 const hostInfo = document.createElement('div');
+                hostInfo.classList.add('result-card');
                 hostInfo.innerHTML = `<strong>IP Address:</strong> ${host}`;
                 
                 const portsList = document.createElement('ul');
