@@ -1,6 +1,6 @@
 # IoT Vulnerability Scanner
 
-This project is an IoT Vulnerability Scanner that uses Python for network scanning (leveraging Nmap) and Go for the HTTP server to handle scan requests. The setup is ideal for scanning a network to detect open ports and services on IoT devices, making it easier to identify potential security vulnerabilities.
+This project is an IoT Vulnerability Scanner that uses Laravel as the web frontend, Go for the backend HTTP server to handle scan requests, and Python for network scanning (leveraging Nmap). The setup is designed to scan a network for open ports and services on IoT devices, helping to identify potential security vulnerabilities.
 
 ## Project Structure
 ```
@@ -9,66 +9,91 @@ IOT-VULN-SCANNER/
 │   ├── go.mod                # Go module file for dependencies
 │   └── app/
 │       └── server.go         # Go HTTP server for handling scan requests
+├── laravel/
+│   ├── app/                  # Laravel application files
+│   ├── routes/               # Routes definition
+│   └── ...                   # Other Laravel directories and config files
 ├── python/
 │   ├── requirements.txt      # Python dependencies
 │   └── scanner_service.py    # Python script that performs the scan using Nmap
-├── run.sh                    # Script to start both Go and Python services
-├── README.md                 # Project documentation
-└── .gitignore                # Ignored files for Git
+├── run.sh                    # Script to start Go, Python, and Laravel services
+├── LICENSE                   # License file
+└── README.md                 # Project documentation
 ```
 
 ## Requirements
-- Go: Version 1.16 or later
-- Python: Version 3.7 or later
-- Nmap: Ensure Nmap is installed on the system for network scanning
+- **Go**: Version 1.16 or later
+- **Python**: Version 3.7 or later
+- **PHP**: Version 7.4 or later (for Laravel)
+- **Nmap**: Ensure Nmap is installed on the system for network scanning
+- **Composer**: To manage Laravel dependencies
 
 ```bash
-sudo apt install nmap
+sudo apt install nmap php composer
 ``` 
 
 ## Setup Instructions
 
-1. Clone the Repository:
+1. **Clone the Repository**:
 
-```bash
-git clone https://github.com/izzuddinafif/iot-vuln-scanner.git
-cd iot-vuln-scanner
-```
+   ```bash
+   git clone https://github.com/izzuddinafif/iot-vuln-scanner.git
+   cd iot-vuln-scanner
+   ```
 
-2. Install Python Dependencies: Navigate to the python directory and install the required packages using requirements.txt.
+2. **Install Python Dependencies**:
+   Navigate to the `python` directory and install the required packages:
 
-```bash
-pip install -r python/requirements.txt
-```
+   ```bash
+   pip install -r python/requirements.txt
+   ```
 
-3. Run the Project: Use the run.sh script to start both the Go and Python services.
+3. **Install Laravel Dependencies**:
+   In the `laravel` directory, install dependencies and set up the `.env` file:
 
-```bash
-chmod +x run.sh
-./run.sh [optional IP range]
-```
+   ```bash
+   cd laravel
+   cp .env.example .env
+   composer install
+   php artisan key:generate
+   ```
 
-- If no IP range is specified, it will default to 192.168.1.0/24.
+4. **Run the Project**:
+   Use the `run.sh` script to start all services (Go, Python, and Laravel).
 
-- Example:
+   ```bash
+   chmod +x run.sh
+   ./run.sh [optional IP range]
+   ```
 
-```bash
-./run.sh 192.168.217.0/24
-```
+   - If no IP range is specified, it defaults to `192.168.1.0/24`.
+
+   - Example:
+
+     ```bash
+     ./run.sh 192.168.217.0/24
+     ```
 
 ## Usage
 
-Once the services are running, you can use curl or a similar tool to make HTTP requests to the Go server to initiate scans.
+Once the services are running, you can access the Laravel frontend at `https://iot-vuln-scanner.izzuddinafif.com` to initiate network scans and view results.
 
-- Initiate a Scan with Default IP Range:
-```bash
-curl "http://localhost:8080/scan"
-```
-- Specify a Target IP Range:
-```bash
-curl "http://localhost:8080/scan?target=192.168.1.0/24"
-```
-The Go server forwards the scan request to the Python service, which uses Nmap to scan the specified range and returns the results in JSON format.
+### Initiating a Scan
+
+1. **From the Web Interface**:
+   - Go to `https://iot-vuln-scanner.izzuddinafif.com` and click on "Start Scan" to initiate a scan.
+
+2. **Using CURL**:
+   - Initiate a scan with the default IP range:
+     ```bash
+     curl "http://localhost:8080/scan"
+     ```
+   - Specify a target IP range:
+     ```bash
+     curl "http://localhost:8080/scan?target=192.168.1.0/24"
+     ```
+
+The Go server forwards the scan request to the Python service, which performs the scan with Nmap and returns results in JSON format.
 
 ## Example JSON Response
 
@@ -107,15 +132,17 @@ The Go server forwards the scan request to the Python service, which uses Nmap t
     }
 }
 ```
+
 ## Customization
 
-- Change Default IP Range: Modify the target flag in server.go to set a different default IP range for scanning.
-- Run on Different Ports: Edit server.go and scanner_service.py to configure the HTTP servers to listen on different ports.
-- Additional Scanning Options: Modify the scanner_service.py code to add more Nmap options or use Nmap’s scripting engine for specific vulnerability checks.
+- **Change Default IP Range**: Modify the default range in `server.go` or pass a range to `run.sh` when starting.
+- **Adjust Laravel Frontend**: Customize `laravel/resources` for frontend adjustments.
+- **Add Scanning Options**: Modify `scanner_service.py` to add more Nmap options or use Nmap’s scripting engine for specific vulnerability checks.
 
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
-Contributing
 
-Feel free to submit issues or pull requests to improve the project. Contributions are welcome!
+## Contributing
+
+Contributions are welcome! Feel free to submit issues or pull requests to improve the project.
